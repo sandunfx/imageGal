@@ -27,7 +27,7 @@
         background-color: rgb(0, 0, 0);
       }
 
-      .img{
+      .img {
         width: 300px;
         padding: 5px;
       }
@@ -35,7 +35,9 @@
   </head>
   <body>
     <div class="parent">
-      <div id="drag-1" class="draggable"> <img class="img" src="img1.jpg" alt=""> </div>
+      <div id="drag-1" class="draggable">
+        <img class="img" src="img1.jpg" alt="" />
+      </div>
     </div>
 
     <script>
@@ -75,6 +77,23 @@
         target.setAttribute("data-x", x);
         target.setAttribute("data-y", y);
       }
+
+      var angle = 0;
+
+      interact("#drag-1").gesturable({
+        listeners: {
+          move(event) {
+            var arrow = document.getElementById("arrow");
+
+            angle += event.da;
+
+            arrow.style.transform = "rotate(" + angle + "deg)";
+
+            document.getElementById("angle-info").textContent =
+              angle.toFixed(2) + "\u00b0";
+          },
+        },
+      });
 
       // this function is used later in the resizing and gesture demos
       window.dragMoveListener = dragMoveListener;
