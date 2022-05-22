@@ -83,6 +83,7 @@
       interact(".draggable").gesturable({
         listeners: {
           move(event) {
+              alert("test");
             var arrow = document.getElementById("#drag-1");
 
             angle += event.da;
