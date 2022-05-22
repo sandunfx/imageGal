@@ -1,12 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <h1>Test</h1>
-</body>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+
+   
+
+    <style>
+      #drag-1,
+      #drag-2 {
+        width: 25%;
+        min-height: 6.5em;
+        margin: 1rem 0 0 1rem;
+        background-color: #29e;
+        color: white;
+        padding: 4%;
+        touch-action: none;
+        user-select: none;
+        transform: translate(0px, 0px);
+      }
+
+      .parent {
+        width: 1000px;
+        height: 1000px;
+        background-color: chartreuse;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="parent">
+        <div id="drag-1" class="draggable">
+          </div>
+    </div>
+
+    <script>
+      // target elements with the "draggable" class
+      interact(".draggable").draggable({
+        // enable inertial throwing
+        inertia: true,
+        // keep the element within the area of it's parent
+        modifiers: [
+          interact.modifiers.restrictRect({
+            restriction: "parent",
+            endOnly: true,
+          }),
+        ],
+        // enable autoScroll
+        autoScroll: true,
+
+        listeners: {
+          // call this function on every dragmove event
+          move: dragMoveListener,
+
+          // call this function on every dragend event
+          end(event) {
+           
+          },
+        },
+      });
+
+      function dragMoveListener(event) {
+        var target = event.target;
+        // keep the dragged position in the data-x/data-y attributes
+        var x = (parseFloat(target.getAttribute("data-x")) || 0) + event.dx;
+        var y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
+
+        // translate the element
+        target.style.transform = "translate(" + x + "px, " + y + "px)";
+
+        // update the posiion attributes
+        target.setAttribute("data-x", x);
+        target.setAttribute("data-y", y);
+
+      
+      }
+
+      // this function is used later in the resizing and gesture demos
+      window.dragMoveListener = dragMoveListener;
+    </script>
+  </body>
 </html>
