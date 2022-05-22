@@ -83,15 +83,12 @@
       interact(".draggable").gesturable({
         listeners: {
           move(event) {
-              alert("test");
             var arrow = document.getElementById("#drag-1");
 
             angle += event.da;
 
             arrow.style.transform = "rotate(" + angle + "deg)";
 
-            document.getElementById("angle-info").textContent =
-              angle.toFixed(2) + "\u00b0";
           },
         },
       });
