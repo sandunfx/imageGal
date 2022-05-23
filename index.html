@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
     <script
@@ -22,14 +21,19 @@
       }
 
       .parent {
-        width: 1000px;
-        height: 1000px;
+        width: 1080px;
+        height: 1920px;
         background-color: rgb(0, 0, 0);
       }
 
       .img {
         width: 300px;
         padding: 5px;
+      }
+
+      *{
+          margin: 0;
+            padding: 0;
       }
     </style>
   </head>
@@ -41,60 +45,116 @@
     </div>
 
     <script>
-    //   // target elements with the "draggable" class
-    //   interact(".draggable").draggable({
-    //     // enable inertial throwing
-    //     inertia: true,
-    //     // keep the element within the area of it's parent
-    //     modifiers: [
-    //       interact.modifiers.restrictRect({
-    //         restriction: "parent",
-    //         endOnly: true,
-    //       }),
-    //     ],
-    //     // enable autoScroll
-    //     autoScroll: true,
+      // target elements with the "draggable" class
+        interact(".draggable").draggable({
+          // enable inertial throwing
+        //   inertia: true,
+          inertia: {
+      resistance: 5,
+      minSpeed: 500,
+      endSpeed: 100
+    },
+          // keep the element within the area of it's parent
+          modifiers: [
+            interact.modifiers.restrictRect({
+              restriction: "parent",
+              endOnly: true,
+            }),
+          ],
+          // enable autoScroll
+          autoScroll: true,
 
-    //     listeners: {
-    //       // call this function on every dragmove event
-    //       move: dragMoveListener,
+          listeners: {
+            // call this function on every dragmove event
+            move: dragMoveListener,
 
-    //       // call this function on every dragend event
-    //       end(event) {},
-    //     },
-    //   });
-
-    //   function dragMoveListener(event) {
-    //     var target = event.target;
-    //     // keep the dragged position in the data-x/data-y attributes
-    //     var x = (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
-    //     var y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
-
-    //     // translate the element
-    //     target.style.transform = "translate(" + x + "px, " + y + "px)";
-
-    //     // update the posiion attributes
-    //     target.setAttribute("data-x", x);
-    //     target.setAttribute("data-y", y);
-    //   }
-
-      var angle = 0;
-
-      interact(".draggable").gesturable({
-        listeners: {
-          move(event) {
-            var arrow = document.getElementById("#drag-1");
-
-            angle += event.da;
-
-            arrow.style.transform = "rotate(" + angle + "deg)";
-
+            // call this function on every dragend event
+            end(event) {},
           },
-        },
-      });
+        });
 
+        function dragMoveListener(event) {
+          var target = event.target;
+          // keep the dragged position in the data-x/data-y attributes
+          var x = (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
+          var y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
+
+          // translate the element
+          target.style.transform = `translate(${x}px, ${y}px)`;
+
+          // update the posiion attributes
+          target.setAttribute("data-x", x);
+          target.setAttribute("data-y", y);
+        }
+
+      //   var angle = 0;
+
+      //   interact(".draggable").gesturable({
+      //     listeners: {
+      //       move(event) {
+      //         var arrow = document.getElementById("drag-1");
+
+      //         angle += event.da;
+      //         arrow.style.transform = "rotate(" + angle + "deg)";
+
+      //       },
+      //     },
+      //   });
+
+    //   var angleScale = {
+    //     angle: 0,
+    //     scale: 1,
+    //   };
+    //   var gestureArea = document.getElementById("drag-1");
+    //   var scaleElement = document.getElementById("drag-1");
+    //   var resetTimeout;
+
+    //   interact(gestureArea)
+    //     .gesturable({
+    //       listeners: {
+    //         start(event) {
+    //           angleScale.angle -= event.angle;
+
+    //           clearTimeout(resetTimeout);
+    //           scaleElement.classList.remove("reset");
+    //         },
+    //         move(event) {
+    //           // document.body.appendChild(new Text(event.scale))
+    //           var currentAngle = event.angle + angleScale.angle;
+    //           var currentScale = event.scale * angleScale.scale;
+
+    //           scaleElement.style.transform =
+    //             "rotate(" +
+    //             currentAngle +
+    //             "deg)" +
+    //             "scale(" +
+    //             currentScale +
+    //             ")";
+
+    //           // uses the dragMoveListener from the draggable demo above
+    //           dragMoveListener(event);
+    //         },
+    //         end(event) {
+    //           angleScale.angle = angleScale.angle + event.angle;
+    //           angleScale.scale = angleScale.scale * event.scale;
+
+    //           resetTimeout = setTimeout(reset, 1000);
+    //           scaleElement.classList.add("reset");
+    //         },
+    //       },
+    //     })
+    //     .draggable({
+    //       listeners: { move: dragMoveListener },
+    //     });
+
+    //   function reset() {
+    //     scaleElement.style.transform = "scale(1)";
+
+    //     angleScale.angle = 0;
+    //     angleScale.scale = 1;
+    //   }
       // this function is used later in the resizing and gesture demos
-    //   window.dragMoveListener = dragMoveListener;
+      //   window.dragMoveListener = dragMoveListener;
     </script>
   </body>
 </html>
