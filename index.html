@@ -96,7 +96,7 @@
         // translate the element
         // target.style.transform = `translate(${x}px, ${y}px)`;
         // target.style.transform = `translate(${x}px, ${y}px) rotate(${angle}deg)`;
-        target.style.transform =  `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
+        target.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
 
         // update the posiion attributes
         target.setAttribute("data-x", x);
@@ -123,6 +123,8 @@
       var gestureArea = document.getElementById("drag-1");
       var scaleElement = document.getElementById("drag-1");
       var resetTimeout;
+      var currentAngle = 0;
+      var currentScale = 1;
 
       interact(gestureArea)
         .gesturable({
@@ -135,10 +137,10 @@
             },
             move(event) {
               // document.body.appendChild(new Text(event.scale))
-              var currentAngle = event.angle + angleScale.angle;
-              var currentScale = event.scale * angleScale.scale;
+              currentAngle = event.angle + angleScale.angle;
+              currentScale = event.scale * angleScale.scale;
 
-              scaleElement.style.transform =  `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
+              scaleElement.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
 
               // uses the dragMoveListener from the draggable demo above
               dragMoveListener(event);
