@@ -48,7 +48,9 @@
     </style>
   </head>
   <body>
-    <span id="log"></span>
+    <span id="log"></span><br>
+    <span id="log2"></span><br>
+
     <div class="parent">
       <div id="drag-1" class="draggable">
         <img class="img" src="img1.jpg" alt="" />
@@ -139,6 +141,9 @@
               // document.body.appendChild(new Text(event.scale))
               currentAngle = event.angle + angleScale.angle;
               currentScale = event.scale * angleScale.scale;
+
+              document.getElementById("log").innerHTML = currentAngle;
+              document.getElementById("log2").innerHTML = currentScale;
 
               scaleElement.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
 
