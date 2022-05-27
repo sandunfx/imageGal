@@ -48,6 +48,7 @@
 
       var x = 0;
       var y = 0;
+      var angle = 0;
 
       // target elements with the "draggable" class
         interact(".draggable").draggable({
@@ -84,26 +85,27 @@
           y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
 
           // translate the element
-          target.style.transform = `translate(${x}px, ${y}px)`;
+          // target.style.transform = `translate(${x}px, ${y}px)`;
+          target.style.transform = `translate(${x}px, ${y}px) rotate( ${angle} deg)`;
+
 
           // update the posiion attributes
           target.setAttribute("data-x", x);
           target.setAttribute("data-y", y);
         }
 
-      //   var angle = 0;
 
-      //   interact(".draggable").gesturable({
-      //     listeners: {
-      //       move(event) {
-      //         var arrow = document.getElementById("drag-1");
+        interact(".draggable").gesturable({
+          listeners: {
+            move(event) {
+              var arrow = document.getElementById("drag-1");
 
-      //         angle += event.da;
-      //         arrow.style.transform = "rotate(" + angle + "deg)";
+              angle += event.da;
+              arrow.style.transform = `translate(${x}px, ${y}px) rotate( ${angle} deg)`;
 
-      //       },
-      //     },
-      //   });
+            },
+          },
+        });
 
     //   var angleScale = {
     //     angle: 0,
