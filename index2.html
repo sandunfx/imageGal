@@ -60,79 +60,14 @@
     <script>
       var x = 0;
       var y = 0;
-      var angle = 0;
-
-      // target elements with the "draggable" class
-      /*interact(".draggable").draggable({
-        inertia: {
-          resistance: 5,
-          minSpeed: 500,
-          endSpeed: 100,
-        },
-        // keep the element within the area of it's parent
-        modifiers: [
-          interact.modifiers.restrictRect({
-            restriction: "parent",
-            endOnly: true,
-          }),
-        ],
-        // enable autoScroll
-        autoScroll: true,
-        listeners: {
-          // call this function on every dragmove event
-          move: dragMoveListener,
-          // call this function on every dragend event
-          end(event) {},
-        },
-      });
 
       function dragMoveListener(event) {
         var target = event.target;
-        // keep the dragged position in the data-x/data-y attributes
         x = (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
         y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
 
-        if (isNaN(angle)) {
-          angle = 0;
-        }
-        // translate the element
-        // target.style.transform = `translate(${x}px, ${y}px)`;
-        // target.style.transform = `translate(${x}px, ${y}px) rotate(${angle}deg)`;
         target.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
 
-        // update the posiion attributes
-        target.setAttribute("data-x", x);
-        target.setAttribute("data-y", y);
-      }
-
-      // interact(".draggable").gesturable({
-      //   listeners: {
-      //     move(event) {
-      //       var arrow = document.getElementById("drag-1");
-
-      //       angle += event.da;
-      //       document.getElementById("log").innerHTML = angle;
-
-      //       arrow.style.transform = `translate(${x}px, ${y}px) rotate(${angle}deg)`;
-      //     },
-      //   },
-      // });*/
-
-      function dragMoveListener(event) {
-        var target = event.target;
-        // keep the dragged position in the data-x/data-y attributes
-        x = (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
-        y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
-
-        if (isNaN(angle)) {
-          angle = 0;
-        }
-        // translate the element
-        // target.style.transform = `translate(${x}px, ${y}px)`;
-        // target.style.transform = `translate(${x}px, ${y}px) rotate(${angle}deg)`;
-        target.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
-
-        // update the posiion attributes
         target.setAttribute("data-x", x);
         target.setAttribute("data-y", y);
       }
@@ -151,32 +86,19 @@
         .gesturable({
           listeners: {
             start(event) {
-              console.log(event);
-
               angleScale.angle -= event.angle;
-
-              // clearTimeout(resetTimeout);
-              // scaleElement.classList.remove("reset");
             },
             move(event) {
-              // document.body.appendChild(new Text(event.scale))
               currentAngle = event.angle + angleScale.angle;
               currentScale = event.scale * angleScale.scale;
               
-              console.log(currentAngle);
-              console.log(currentScale);
-
               scaleElement.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
 
-              // uses the dragMoveListener from the draggable demo above
               dragMoveListener(event);
             },
             end(event) {
               angleScale.angle = angleScale.angle + event.angle;
               angleScale.scale = angleScale.scale * event.scale;
-
-              // resetTimeout = setTimeout(reset, 1000);
-              // scaleElement.classList.add("reset");
             },
           },
         })
@@ -184,14 +106,6 @@
           listeners: { move: dragMoveListener },
         });
 
-      function reset() {
-        scaleElement.style.transform = "scale(1)";
-
-        angleScale.angle = 0;
-        angleScale.scale = 1;
-      }
-      // this function is used later in the resizing and gesture demos
-      window.dragMoveListener = dragMoveListener;
     </script>
   </body>
 </html>
