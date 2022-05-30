@@ -45,10 +45,12 @@
       var x = 0;
       var y = 0;
 
-      var xy = [
-        { x: 100, y: 100 },
-        { x: 500, y: 100 },
-      ];
+      var angleScale = {
+        angle: 0,
+        scale: 1,
+      };
+      var currentAngle = 0;
+      var currentScale = 1;
 
       images.forEach(function (image) {
         let container = document.createElement("div");
@@ -68,31 +70,45 @@
       var scaleElement = document.getElementsByClassName("draggable");
 
       for (var i = 0; i < gestureArea.length; i++) {
-        interact(gestureArea.item(i)).draggable({
-          listeners: {
-            move(event) {
-              // var target = event.target;
-              // let index = target.getAttribute("data-id")
-              // xy[index].x = (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
-              // xy[index].y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
+        interact(gestureArea.item(i))
+          .gesturable({
+            listeners: {
+              start(event) {
+                angleScale.angle -= event.angle;
+              },
+              move(event) {
+                let target = event.target;
 
-              // target.style.transform = `translate(${xy[index].x}px, ${xy[index].y}px) rotate(${0}deg) scale(${1})`;
+                currentAngle = event.angle + angleScale.angle;
+                currentScale = event.scale * angleScale.scale;
 
-              // target.setAttribute("data-x", xy[index].x);
-              // target.setAttribute("data-y", xy[index].y);
+                target.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
 
-              var target = event.target;
-              let index = target.getAttribute("data-id")
-              x = (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
-              y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
-
-              target.style.transform = `translate(${x}px, ${y}px) rotate(${0}deg) scale(${1})`;
-
-              target.setAttribute("data-x", x);
-              target.setAttribute("data-y", y);
+                dragMoveListener(event);
+              },
+              end(event) {
+                angleScale.angle = angleScale.angle + event.angle;
+                angleScale.scale = angleScale.scale * event.scale;
+              },
             },
-          },
-        });
+          })
+          .draggable({
+            listeners: {
+              move(event) {
+                let target = event.target;
+                let index = target.getAttribute("data-id");
+                x =
+                  (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
+                y =
+                  (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
+
+                target.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
+
+                target.setAttribute("data-x", x);
+                target.setAttribute("data-y", y);
+              },
+            },
+          });
       }
     </script>
   </body>
