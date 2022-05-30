@@ -49,13 +49,19 @@
         angle: 0,
         scale: 1,
       };
-      var currentAngle = 0;
-      var currentScale = 1;
 
-      images.forEach(function (image) {
+      var currentAngle = [0, 0, 0];
+      var currentScale = [1, 1, 1];
+      // var currentAngle = 0;
+      // var currentScale = 1;
+
+      var gestureArea = document.getElementsByClassName("draggable");
+      var scaleElement = document.getElementsByClassName("draggable");
+
+      images.forEach(function (image, i) {
         let container = document.createElement("div");
         container.className = "draggable";
-        container.setAttribute("data-id", 1);
+        container.setAttribute("data-id", i);
 
         let img = document.createElement("img");
         img.src = `images/${image}`;
@@ -66,9 +72,6 @@
         document.getElementById("parent").appendChild(container);
       });
 
-      var gestureArea = document.getElementsByClassName("draggable");
-      var scaleElement = document.getElementsByClassName("draggable");
-
       for (var i = 0; i < gestureArea.length; i++) {
         interact(gestureArea.item(i))
           .gesturable({
@@ -78,11 +81,12 @@
               },
               move(event) {
                 let target = event.target;
+                let index = target.getAttribute("data-id");
 
-                currentAngle = event.angle + angleScale.angle;
-                currentScale = event.scale * angleScale.scale;
+                currentAngle[index] = event.angle + angleScale.angle;
+                currentScale[index] = event.scale * angleScale.scale;
 
-                target.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
+                target.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle[index]}deg) scale(${currentScale[index]})`;
 
                 dragMoveListener(event);
               },
