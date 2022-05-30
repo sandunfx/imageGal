@@ -63,7 +63,7 @@
       var angle = 0;
 
       // target elements with the "draggable" class
-      interact(".draggable").draggable({
+      /*interact(".draggable").draggable({
         inertia: {
           resistance: 5,
           minSpeed: 500,
@@ -116,7 +116,26 @@
       //       arrow.style.transform = `translate(${x}px, ${y}px) rotate(${angle}deg)`;
       //     },
       //   },
-      // });
+      // });*/
+
+      function dragMoveListener(event) {
+        var target = event.target;
+        // keep the dragged position in the data-x/data-y attributes
+        x = (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
+        y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
+
+        if (isNaN(angle)) {
+          angle = 0;
+        }
+        // translate the element
+        // target.style.transform = `translate(${x}px, ${y}px)`;
+        // target.style.transform = `translate(${x}px, ${y}px) rotate(${angle}deg)`;
+        target.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
+
+        // update the posiion attributes
+        target.setAttribute("data-x", x);
+        target.setAttribute("data-y", y);
+      }
 
       var angleScale = {
         angle: 0,
@@ -132,18 +151,20 @@
         .gesturable({
           listeners: {
             start(event) {
+              console.log(event);
+
               angleScale.angle -= event.angle;
 
-              clearTimeout(resetTimeout);
-              scaleElement.classList.remove("reset");
+              // clearTimeout(resetTimeout);
+              // scaleElement.classList.remove("reset");
             },
             move(event) {
               // document.body.appendChild(new Text(event.scale))
               currentAngle = event.angle + angleScale.angle;
               currentScale = event.scale * angleScale.scale;
-
-              document.getElementById("log").innerHTML = currentAngle;
-              document.getElementById("log2").innerHTML = currentScale;
+              
+              console.log(currentAngle);
+              console.log(currentScale);
 
               scaleElement.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
 
@@ -154,8 +175,8 @@
               angleScale.angle = angleScale.angle + event.angle;
               angleScale.scale = angleScale.scale * event.scale;
 
-              resetTimeout = setTimeout(reset, 1000);
-              scaleElement.classList.add("reset");
+              // resetTimeout = setTimeout(reset, 1000);
+              // scaleElement.classList.add("reset");
             },
           },
         })
