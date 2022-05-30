@@ -42,6 +42,9 @@
 
     <script>
       var images = ["1.jpg", "2.jpg", "4.jpg"];
+      var x = 0;
+      var y = 0;
+
       var xy = [
         { x: 100, y: 100 },
         { x: 500, y: 100 },
@@ -68,15 +71,25 @@
         interact(gestureArea.item(i)).draggable({
           listeners: {
             move(event) {
+              // var target = event.target;
+              // let index = target.getAttribute("data-id")
+              // xy[index].x = (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
+              // xy[index].y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
+
+              // target.style.transform = `translate(${xy[index].x}px, ${xy[index].y}px) rotate(${0}deg) scale(${1})`;
+
+              // target.setAttribute("data-x", xy[index].x);
+              // target.setAttribute("data-y", xy[index].y);
+
               var target = event.target;
               let index = target.getAttribute("data-id")
-              xy[index].x = (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
-              xy[index].y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
+              x = (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
+              y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
 
-              target.style.transform = `translate(${xy[index].x}px, ${xy[index].y}px) rotate(${0}deg) scale(${1})`;
+              target.style.transform = `translate(${x}px, ${y}px) rotate(${0}deg) scale(${1})`;
 
-              target.setAttribute("data-x", xy[index].x);
-              target.setAttribute("data-y", xy[index].y);
+              target.setAttribute("data-x", x);
+              target.setAttribute("data-y", y);
             },
           },
         });
