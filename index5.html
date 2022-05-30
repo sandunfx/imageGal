@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Document</title>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <style>
+      .draggable {
+        width: 412px;
+        height: 312px;
+        background-color: white;
+        touch-action: none;
+        user-select: none;
+        transform: translate(100px, 100px);
+      }
+
+      #parent {
+        width: 1080px;
+        height: 1920px;
+        background-color: rgb(0, 0, 0);
+      }
+
+      .img {
+        width: 400px;
+        padding: 5px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="parent"></div>
+
+    <script>
+      var images = ["1.jpg", "2.jpg", "4.jpg"];
+      var xy = [
+        { x: 100, y: 100 },
+        { x: 500, y: 100 },
+      ];
+
+      images.forEach(function (image) {
+        let container = document.createElement("div");
+        container.className = "draggable";
+        container.setAttribute("data-id", 1);
+
+        let img = document.createElement("img");
+        img.src = `images/${image}`;
+        img.className = "img";
+
+        container.appendChild(img);
+
+        document.getElementById("parent").appendChild(container);
+      });
+
+      var gestureArea = document.getElementsByClassName("draggable");
+      var scaleElement = document.getElementsByClassName("draggable");
+
+      for (var i = 0; i < gestureArea.length; i++) {
+        interact(gestureArea.item(i)).draggable({
+          listeners: {
+            move(event) {
+              var target = event.target;
+              let index = target.getAttribute("data-id")
+              xy[index].x = (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
+              xy[index].y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
+
+              target.style.transform = `translate(${xy[index].x}px, ${xy[index].y}px) rotate(${0}deg) scale(${1})`;
+
+              target.setAttribute("data-x", xy[index].x);
+              target.setAttribute("data-y", xy[index].y);
+            },
+          },
+        });
+      }
+    </script>
+  </body>
+</html>

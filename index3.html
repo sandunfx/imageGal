@@ -22,6 +22,12 @@
         padding: 5px;
       }
 
+      .drag{
+        background-color: aliceblue;
+        width: 400px;
+        transform: translate(100px, 100px);
+      }
+
       * {
         margin: 0;
         padding: 0;
@@ -32,13 +38,21 @@
     <div id="parent"></div>
 
     <script>
-      var images = ["1.jpg", "2.jpg"];
+      var images = ["1.jpg"];
 
       images.forEach(function (image) {
+
+        var container = document.createElement("div");
+        container.setAttribute("id", "drag");
+        container.className = "drag";
+
         var img = document.createElement("img");
         img.src = `images/${image}`;
         img.className = "img";
-        document.getElementById("parent").appendChild(img);
+
+        container.appendChild(img);
+
+        document.getElementById("parent").appendChild(container);
       });
 
       var x = 0;
@@ -48,6 +62,7 @@
         var target = event.target;
         x = (parseFloat(target.getAttribute("data-x")) || 100) + event.dx;
         y = (parseFloat(target.getAttribute("data-y")) || 100) + event.dy;
+        console.log(x + ", " + y);
 
         target.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
 
@@ -59,24 +74,58 @@
         angle: 0,
         scale: 1,
       };
-      var gestureArea = document.getElementsByClassName("img");
-      var scaleElement = document.getElementsByClassName("img");
+      // var gestureArea = document.getElementsByClassName("drag");
+      // var scaleElement = document.getElementsByClassName("img");
       var resetTimeout;
       var currentAngle = 0;
       var currentScale = 1;
 
-      for (var i = 0; i < gestureArea.length; i++) {
-        interact(gestureArea.item(i))
+      // for (var i = 0; i < gestureArea.length; i++) {
+      //   interact(gestureArea.item(i))
+      //   .gesturable({
+      //     listeners: {
+      //       start(event) {
+      //         console.log(event);
+
+      //         angleScale.angle -= event.angle;
+      //       },
+      //       move(event) {
+      //         currentAngle = event.angle + angleScale.angle;
+      //         currentScale = event.scale * angleScale.scale;
+      //         console.log(currentAngle + ", " + currentScale);
+              
+      //         gestureArea.item(i).style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
+
+      //         dragMoveListener(event);
+      //       },
+      //       end(event) {
+      //         angleScale.angle = angleScale.angle + event.angle;
+      //         angleScale.scale = angleScale.scale * event.scale;
+      //       },
+      //     },
+      //   })
+      //   .draggable({
+      //     listeners: { move: dragMoveListener },
+      //   });
+
+      // }
+
+      var gestureArea = document.getElementById("drag");
+
+      interact(gestureArea)
         .gesturable({
           listeners: {
             start(event) {
+              console.log(event);
+
               angleScale.angle -= event.angle;
             },
             move(event) {
               currentAngle = event.angle + angleScale.angle;
               currentScale = event.scale * angleScale.scale;
+              console.log(currentAngle + ", " + currentScale);
               
-              scaleElement.style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
+              gestureArea.item(i).style.transform = `translate(${x}px, ${y}px) rotate(${currentAngle}deg) scale(${currentScale})`;
 
               dragMoveListener(event);
             },
@@ -89,8 +138,6 @@
         .draggable({
           listeners: { move: dragMoveListener },
         });
-
-      }
     </script>
   </body>
 </html>
