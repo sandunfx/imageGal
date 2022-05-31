@@ -51,10 +51,17 @@
         { x: 0, y: 0 },
       ];
 
-      var angleScale = {
-        angle: 0,
-        scale: 1,
-      };
+      // var angleScale = {
+      //   angle: 0,
+      //   scale: 1,
+      // };
+
+      var angleScale = [
+        { angle: 0, scale: 1 },
+        { angle: 0, scale: 1 },
+        { angle: 0, scale: 1 },
+      ];
+    
 
       var currentAngle = [0, 0, 0];
       var currentScale = [1, 1, 1];
@@ -99,20 +106,24 @@
           .gesturable({
             listeners: {
               start(event) {
-                angleScale.angle -= event.angle;
+                let index = target.getAttribute("data-id");
+
+                angleScale[index].angle -= event.angle;
               },
               move(event) {
                 let target = event.target;
                 let index = target.getAttribute("data-id");
 
-                currentAngle[index] = event.angle + angleScale.angle;
-                currentScale[index] = event.scale * angleScale.scale;
+                currentAngle[index] = event.angle + angleScale[index].angle;
+                currentScale[index] = event.scale * angleScale[index].scale;
 
                 target.style.transform = `translate(${xy[index].x}px, ${xy[index].y}px) rotate(${currentAngle[index]}deg) scale(${currentScale[index]})`;
               },
               end(event) {
-                angleScale.angle = angleScale.angle + event.angle;
-                angleScale.scale = angleScale.scale * event.scale;
+                let index = target.getAttribute("data-id");
+
+                angleScale[index].angle = angleScale[index].angle + event.angle;
+                angleScale[index].scale = angleScale[index].scale * event.scale;
               },
             },
           });
