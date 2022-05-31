@@ -99,20 +99,20 @@
           .gesturable({
             listeners: {
               start(event) {
-                // currentAngle[index] -= event.angle;
+                angleScale.angle -= event.angle;
               },
               move(event) {
                 let target = event.target;
                 let index = target.getAttribute("data-id");
 
-                currentAngle[index] = event.angle + currentAngle[index];
-                currentScale[index] = event.scale * currentScale[index];
+                currentAngle[index] = event.angle + angleScale.angle;
+                currentScale[index] = event.scale * angleScale.scale;
 
                 target.style.transform = `translate(${xy[index].x}px, ${xy[index].y}px) rotate(${currentAngle[index]}deg) scale(${currentScale[index]})`;
               },
               end(event) {
-                // currentAngle[index] = currentAngle[index] + event.angle;
-                // currentScale[index] = currentScale[index] * event.scale;
+                angleScale.angle = angleScale.angle + event.angle;
+                angleScale.scale = angleScale.scale * event.scale;
               },
             },
           });
