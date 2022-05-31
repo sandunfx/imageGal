@@ -47,12 +47,13 @@
     <div id="parent"></div>
 
     <script>
-      var images = ["1.jpg", "2.jpg", "4.jpg"];
+      var images = ["1.jpg", "2.jpg", "4.jpg", "6.jpg"];
       var x = 0;
       var y = 0;
       var index = 0;
 
       var xy = [
+        { x: 0, y: 0 },
         { x: 0, y: 0 },
         { x: 0, y: 0 },
         { x: 0, y: 0 },
@@ -62,10 +63,11 @@
         { angle: 0, scale: 1 },
         { angle: 0, scale: 1 },
         { angle: 0, scale: 1 },
+        { angle: 0, scale: 1 },
       ];
-    
-      var currentAngle = [0, 0, 0];
-      var currentScale = [1, 1, 1];
+
+      var currentAngle = [0, 0, 0, 0];
+      var currentScale = [1, 1, 1, 1];
 
       var gestureArea = document.getElementsByClassName("draggable");
       var scaleElement = document.getElementsByClassName("draggable");
@@ -108,8 +110,7 @@
                 target.setAttribute("data-x", xy[index].x);
                 target.setAttribute("data-y", xy[index].y);
               },
-              end(event) {
-              }
+              end(event) {},
             },
           })
           .gesturable({
