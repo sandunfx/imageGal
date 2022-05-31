@@ -115,6 +115,10 @@
           .gesturable({
             listeners: {
               start(event) {
+                for (var i = 0; i < gestureArea.length; i++) {
+                  gestureArea.item(i).classList.remove("selected");
+                }
+                event.target.classList.add("selected");
                 index = event.target.getAttribute("data-id");
                 angleScale[index].angle -= event.angle;
               },
