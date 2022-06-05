@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Document</title>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <style>
+      .draggable {
+        width: 412px;
+        height: 312px;
+        background-color: white;
+        touch-action: none;
+        user-select: none;
+        transform: translate(100px, 100px);
+        position: absolute;
+      }
+
+      #parent {
+        width: 1080px;
+        height: 1920px;
+        background-color: rgb(0, 0, 0);
+      }
+
+      .img {
+        width: 400px;
+        padding: 5px;
+      }
+
+      .selected {
+        border: 4px solid red;
+        z-index: 100 !important;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="parent"></div>
+
+    <script>
+      fetch(
+        "https://iqdkkkhu.api.sanity.io/v2021-06-07/data/query/production?query=*[_type=='image2']{'sanity.imageAsset':*[extension=='jpg'].url}"
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          displayImages(data);
+        })
+        .catch((error) => {});
+
+      function displayImages(data) {
+        console.log(data);
+        var images = data.result.map((image) => {
+          return image['sanity.imageAsset'][0]
+        });
+
+        console.log(images);
+        var x = 0;
+        var y = 0;
+        var index = 0;
+
+        var xy = [];
+        var angleScale = [];
+        var currentAngle = [];
+        var currentScale = [];
+
+        for (i = 0; i < images.length; i++) {
+          xy.push({ x: 0, y: 0 });
+          angleScale.push({ angle: 0, scale: 1 });
+          currentAngle.push(0);
+          currentScale.push(1);
+        }
+
+        var gestureArea = document.getElementsByClassName("draggable");
+        var scaleElement = document.getElementsByClassName("draggable");
+
+        images.forEach(function (image, i) {
+          let container = document.createElement("div");
+          container.className = "draggable";
+          container.setAttribute("data-id", i);
+
+          let img = document.createElement("img");
+          img.src = image;
+          img.className = "img";
+
+          let randAngle = Math.random() * 300;
+          currentAngle[i] = randAngle;
+          angleScale[i].angle = randAngle;
+
+          let ranX = Math.random() * 50 + 300;
+          let ranY = Math.random() * 50 + 600;
+          xy[i].x = ranX;
+          xy[i].y = ranY;
+
+          container.setAttribute("data-x", ranX);
+          container.setAttribute("data-y", ranY);
+
+          container.style.transform = `translate(${ranX}px, ${ranY}px) rotate(${randAngle}deg)`;
+
+          container.appendChild(img);
+
+          document.getElementById("parent").appendChild(container);
+        });
+
+        for (var i = 0; i < gestureArea.length; i++) {
+          interact(gestureArea.item(i))
+            .draggable({
+              listeners: {
+                start(event) {
+                  for (var i = 0; i < gestureArea.length; i++) {
+                    gestureArea.item(i).classList.remove("selected");
+                  }
+                  event.target.classList.add("selected");
+                },
+                move(event) {
+                  let target = event.target;
+                  let index = target.getAttribute("data-id");
+
+                  xy[index].x =
+                    parseFloat(target.getAttribute("data-x")) + event.dx;
+                  xy[index].y =
+                    parseFloat(target.getAttribute("data-y")) + event.dy;
+
+                  target.style.transform = `translate(${xy[index].x}px, ${xy[index].y}px) rotate(${currentAngle[index]}deg) scale(${currentScale[index]})`;
+
+                  target.setAttribute("data-x", xy[index].x);
+                  target.setAttribute("data-y", xy[index].y);
+                },
+                end(event) {},
+              },
+            })
+            .gesturable({
+              listeners: {
+                start(event) {
+                  for (var i = 0; i < gestureArea.length; i++) {
+                    gestureArea.item(i).classList.remove("selected");
+                  }
+                  event.target.classList.add("selected");
+                  index = event.target.getAttribute("data-id");
+                  angleScale[index].angle -= event.angle;
+                },
+                move(event) {
+                  currentAngle[index] = event.angle + angleScale[index].angle;
+                  currentScale[index] = event.scale * angleScale[index].scale;
+                  event.target.style.transform = `translate(${xy[index].x}px, ${xy[index].y}px) rotate(${currentAngle[index]}deg) scale(${currentScale[index]})`;
+                },
+                end(event) {
+                  angleScale[index].angle =
+                    angleScale[index].angle + event.angle;
+                  angleScale[index].scale =
+                    angleScale[index].scale * event.scale;
+                },
+              },
+            });
+        }
+      }
+    </script>
+  </body>
+</html>
